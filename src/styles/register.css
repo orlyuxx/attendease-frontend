@@ -21,38 +21,6 @@
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-.toast {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 4px;
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    font-size: 16px;
-    max-width: 80%;
-    width: auto;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-
-/* Optional: Add different colors for success and error messages */
-.toast.success {
-    background-color: #4CAF50;
-}
-
-.toast.error {
-    background-color: #F44336; /* Red color for error messages */
-}
-
 .floating-label-group {
     position: relative;
     margin-bottom: 20px;
@@ -78,4 +46,9 @@
     opacity: 1;
     background: white;
     padding: 0 4px;
+}
+.flex-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; /* Space between the inputs */
 }
