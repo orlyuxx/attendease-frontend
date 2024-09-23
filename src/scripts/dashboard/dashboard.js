@@ -1,3 +1,34 @@
+import { backendURL, showToast, showErrorToast } from "../utils/utils.js";
+
+const btn_logout = document.getElementById("btn_logout")
+
+btn_logout.onclick = async () => {
+
+    // Access Logout API endpoint
+    const response = await fetch(backendURL + '/api/logout', { 
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem("token"),
+        },
+    });
+
+    // get response if 200-299 status code
+    if (response.ok) { 
+        
+        // clear token
+        localStorage.clear();
+
+        // redirect page
+        window.location.pathname = "/pages/index.html"
+    }
+    // get response if 400 or 500 status code
+    else {
+        const json = await response.json();
+
+        alert('json.message');
+    }
+};
+ 
 let employeeAttendanceChart;
 
 function generateDataKey(year, month) {

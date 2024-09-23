@@ -1,4 +1,4 @@
-import { url, showToast, showErrorToast } from "../utils/utils.js";
+import { backendURL, showToast, showErrorToast } from "../utils/utils.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const form_register = document.getElementById('form_register');
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const formData = new FormData(form_register);
 
                 // fetch API user register endpoint
-                const response = await fetch(url + '/api/user', { 
+                const response = await fetch(backendURL + '/api/user', { 
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',

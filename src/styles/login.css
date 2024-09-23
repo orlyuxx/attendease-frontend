@@ -22,21 +22,31 @@
 }
 
 .toast {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 4px;
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    font-size: 16px;
-    max-width: 80%;
-    width: auto;
+    padding: 10px 20px; /* Padding */
+    margin: 10px 0; /* Margin */
+    border-radius: 5px; /* Rounded corners */
+    position: relative; /* Positioning */
+    animation: fadeIn 0.5s, fadeOut 0.5s 2.5s; /* Animation */
+}
+
+.toast.success {
+    background-color: #4CAF50; /* Green for success */
+    color: white; /* Text color */
+}
+
+.toast.error {
+    background-color: #f44336; /* Red for error */
+    color: white; /* Text color */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
 }
 
 .toast.show {
@@ -78,4 +88,63 @@
     opacity: 1;
     background: white;
     padding: 0 4px;
+}
+
+/* Keyframes for fade-in effect */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Apply fade-in animation to the form container */
+.form-container {
+    animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+/* Keyframes for a slide-in effect for the image */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Apply slide-in animation to the image */
+img {
+    animation: slideIn 0.5s ease-in-out forwards;
+    opacity: 0; /* Start invisible */
+}
+
+/* Class to make the image visible after loading */
+.image-loaded {
+    opacity: 1; /* Make visible after loading */
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Spinner styles */
+.spinner {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

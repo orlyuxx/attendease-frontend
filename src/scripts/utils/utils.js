@@ -1,4 +1,9 @@
-const url = 'http://attendease-backend.test';
+import { setRouter } from "../router/router.js";
+
+// Set Router
+setRouter();
+
+const backendURL = 'http://attendease-backend.test';
 
 function showToast(message) {
     // Create and show toast notification
@@ -38,4 +43,4 @@ function showErrorToast(message) {
     }, 3000);
 }
 
-export { url, showToast, showErrorToast };
+export { backendURL, showToast, showErrorToast };
