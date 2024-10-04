@@ -29,16 +29,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                // Get values of form (input, textarea, select) put it as form data
                 const formData = new FormData(form_login);
+                const formDataObject = Object.fromEntries(formData.entries());
 
-                // Fetch API user login endpoint
-                const response = await fetch(backendURL + '/api/login', { 
+                // Fetch API admin login endpoint
+                const response = await fetch(`${backendURL}/api/admin`, { 
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
+                        'Content-Type': 'application/json',
                     },
-                    body: formData,
+                    credentials: 'include',
+                    body: JSON.stringify(formDataObject),
                 });
 
                 // If the response is ok (status code 200-299)

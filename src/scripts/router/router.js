@@ -9,7 +9,9 @@ function setRouter() {
             }
             break;
         case "/pages/dashboard.html":
-        case "/pages/employees.html":
+        case "/pages/register.html":
+        case "/pages/attendance.html":
+            
             if(!localStorage.getItem("token")) {
                 window.location.pathname = '/pages/index.html';
             }

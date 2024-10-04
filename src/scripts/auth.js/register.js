@@ -6,52 +6,41 @@ document.addEventListener('DOMContentLoaded', () => {
     if (form_register) {
         form_register.onsubmit = async (e) => {
             e.preventDefault();
-            console.log('clicked');
+            console.log('Form submitted');
 
-            // Find the register button
             const registerButton = form_register.querySelector('button[type="submit"]');
-            
-            // Disable the register button
             if (registerButton) {
                 registerButton.disabled = true;
             }
 
             try {
-                // get values of form (input, textarea, select) put it as form data
                 const formData = new FormData(form_register);
 
-                // fetch API user register endpoint
-                const response = await fetch(backendURL + '/api/user', { 
+                const response = await fetch(`${backendURL}/api/user`, { 
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
+                        'Content-Type': 'application/json',
                     },
-                    body: formData,
+                    body: JSON.stringify(Object.fromEntries(formData)),
                 });
 
-                // get response if 200-299 status code
+                console.log('Response status:', response.status);
+                const responseData = await response.json();
+                console.log('Response data:', responseData);
+
                 if (response.ok) { 
-                    const json = await response.json();
-                    console.log(json);
                     form_register.reset();
-                    
-                    // Call the showToast function
                     showToast('Registration complete!');
+                } else if (response.status === 422) {
+                    showErrorToast(responseData.message || 'Validation error occurred'); 
+                } else {
+                    showErrorToast(responseData.message || 'An error occurred');
                 }
-
-                // get response if 422 status code
-                else if (response.status === 422) {
-                    const json = await response.json();
-
-                    // Call the showErrorToast function
-                    showErrorToast(json.message); 
-                }
-            } 
-
-            catch (error) {
+            } catch (error) {
                 console.error('An error occurred:', error);
+                showErrorToast('An error occurred. Please try again.');
             } finally {
-                // enable the register button again
                 if (registerButton) {
                     registerButton.disabled = false;
                 }
@@ -61,3 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Form with id "form_register" not found');
     }
 });
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}

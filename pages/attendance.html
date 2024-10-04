@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Employees</title>
+    <title>Dashboard - Attendance</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../src/output.css">
-    <link rel="stylesheet" href="../src/styles/employee.css">
+    <link href="../src/output.css" rel="stylesheet">
+    <link href="../src/styles/attendance.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> <!-- Font Awesome -->
 
-    <script type="module" src="../src/scripts/dashboard/employee.js"></script>
+    <!-- Add Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <script type="module" src="../src/scripts/dashboard/attendance.js"></script>
 </head>
 
 <body class="bg-gray-100 font-poppins">
@@ -22,26 +23,26 @@
         </div>
         <nav class="mt-4">
             <div class="px-4 py-2 text-xs uppercase text-bir-yellow">Menu</div>
-            <a href="dashboard.html" class="sidebar-link  py-2 px-4 text-gray-300 hover:bg-bir-yellow hover:text-bir-blue flex items-center">
+            <a href="dashboard.html" class="sidebar-link flex py-2 px-4 text-gray-300 hover:bg-bir-yellow hover:text-bir-blue transition-colors duration-200 ease-in-out items-center">
                 <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                 </svg>
                 Dashboard
             </a>
-            <a href="#" class="sidebar-link py-2 px-4 text-gray-300 hover:bg-bir-yellow hover:text-bir-blue active flex items-center">
+            <a href="employees.html" class="sidebar-link flex py-2 px-4 text-gray-300 hover:bg-bir-yellow hover:text-bir-blue transition-colors duration-200 ease-in-out items-center">
                 <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
                 </svg>
                 Employees
             </a>
-            <a href="attendance.html" class="sidebar-link py-2 px-4 text-gray-300 hover:bg-bir-yellow hover:text-bir-blue flex items-center">
+            <a href="#" class="active sidebar-link flex py-2 px-4 text-gray-300 hover:bg-bir-yellow hover:text-bir-blue transition-colors duration-200 ease-in-out items-center">
                 <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" d="M6.625 2.655A9 9 0 0119 11a1 1 0 11-2 0 7 7 0 00-9.625-6.492 1 1 0 11-.75-1.853zM4.662 4.959A1 1 0 014.75 6.37 6.97 6.97 0 003 11a1 1 0 11-2 0 8.97 8.97 0 012.25-5.953 1 1 0 011.412-.088z" clip-rule="evenodd"></path>
                     <path fill-rule="evenodd" d="M5 11a5 5 0 1110 0 1 1 0 11-2 0 3 3 0 10-6 0c0 1.677-.345 3.276-.968 4.729a1 1 0 11-1.838-.789A9.964 9.964 0 005 11zm8.921 2.012a1 1 0 01.831 1.145 19.86 19.86 0 01-.545 2.436 1 1 0 11-1.92-.558c.207-.713.371-1.445.49-2.192a1 1 0 011.144-.831z" clip-rule="evenodd"></path>
                 </svg>
                 Attendance
             </a>
-            <a href="departments.html" class="sidebar-link py-2 px-4 text-gray-300 hover:bg-bir-yellow hover:text-bir-blue flex items-center">
+            <a href="departments.html" class="sidebar-link flex py-2 px-4 text-gray-300 hover:bg-bir-yellow hover:text-bir-blue transition-colors duration-200 ease-in-out items-center">
                 <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
                 </svg>
@@ -60,13 +61,13 @@
                 Leave
             </a>
             <div class="px-4 py-2 mt-6 text-xs uppercase text-bir-yellow">System</div>
-            <a href="#" class="sidebar-link py-2 px-4 text-gray-300 hover:bg-bir-yellow hover:text-bir-blue flex items-center">
+            <a href="#" class="sidebar-link flex py-2 px-4 text-gray-300 hover:bg-bir-yellow hover:text-bir-blue transition-colors duration-200 ease-in-out items-center">
                 <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.532 1.532 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
                 </svg>
                 Settings
             </a>
-            <a href="#" id="btn_logout" class="sidebar-link py-2 px-4 text-gray-300 hover:bg-bir-yellow hover:text-bir-blue flex items-center">
+            <a href="#" id="btn_logout" class="sidebar-link flex py-2 px-4 text-gray-300 hover:bg-bir-yellow hover:text-bir-blue transition-colors duration-200 ease-in-out items-center">
                 <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path>
                 </svg>
@@ -75,7 +76,7 @@
         </nav>
     </aside>
 
-    <!-- New wrapper div for main content -->
+    <!-- Main wrapper -->
     <div id="mainContent" class="main-wrapper transition-all duration-300">
         <!-- Header -->
         <header class="header bg-white text-white p-8 flex justify-between items-center shadow-sm">
@@ -87,11 +88,12 @@
             <div class="flex items-center mb-8 dashboard-title">
                 <div class="flex pt-1 items-center text-sm text-gray-600 font-semibold">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
+                        <path fill-rule="evenodd" d="M6.625 2.655A9 9 0 0119 11a1 1 0 11-2 0 7 7 0 00-9.625-6.492 1 1 0 11-.75-1.853zM4.662 4.959A1 1 0 014.75 6.37 6.97 6.97 0 003 11a1 1 0 11-2 0 8.97 8.97 0 012.25-5.953 1 1 0 011.412-.088z" clip-rule="evenodd"></path>
+                        <path fill-rule="evenodd" d="M5 11a5 5 0 1110 0 1 1 0 11-2 0 3 3 0 10-6 0c0 1.677-.345 3.276-.968 4.729a1 1 0 11-1.838-.789A9.964 9.964 0 005 11zm8.921 2.012a1 1 0 01.831 1.145 19.86 19.86 0 01-.545 2.436 1 1 0 11-1.92-.558c.207-.713.371-1.445.49-2.192a1 1 0 011.144-.831z" clip-rule="evenodd"></path>
                     </svg>
                     <span class="flex items-center mt-1">
                         <span class="mx-2">/</span>
-                        <span class="flex items-center">Employees</span>
+                        <span class="flex items-center">Attendance</span>
                     </span>
                 </div>
                                     
@@ -100,10 +102,13 @@
                 </button>
             </div>
 
+            <!-- Add this right before the Employees Table div -->
+            <div id="currentDate" class="text-lg font-semibold text-gray-700 mb-4"></div>
+
             <!-- Employees Table -->
             <div class="bg-white rounded-lg p-6 dashboard-card">
                 <div class="flex justify-between items-center mb-4">
-                    <h4 class="text-lg font-bold text-gray-700">Employee List</h4>
+                    <h4 class="text-lg font-bold text-gray-700">Attendance Record</h4>
                 </div>
                 <div class="mb-4 flex items-center justify-between">
                     <div class="flex items-center">
@@ -115,22 +120,26 @@
                         </select>
                         <label for="entriesPerPage" class="mr-2 ml-2 text-sm font-semibold text-gray-500">entries</label>
                     </div>
-
+            
                     <div class="flex items-center">
                         <label for="searchInput" class="mr-2 text-sm font-semibold text-gray-500">Search:</label>
                         <input type="text" id="searchInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 p-2" placeholder="">
                     </div>
                 </div>
-
+            
                 <div class="overflow-x-auto">
-                    <table class="min-w-full bg-white table-fixed">
+                    <table class="min-w-full bg-white">
                         <thead>
                             <tr class="bg-bir-blue text-white">
-                                <th class="w-1/6 py-3 px-4 text-xs border-b border-r-2 border-white font-semibold text-left">User ID</th>
-                                <th class="w-1/4 py-3 px-4 text-xs border-b border-r-2 border-white font-semibold text-left">Name</th>
-                                <th class="w-1/6 py-3 px-4 text-xs border-b border-r-2 border-white font-semibold text-left">Department</th>
-                                <th class="w-1/4 py-3 px-4 text-xs border-b border-r-2 border-white font-semibold text-left">Email</th>
-                                <th class="w-1/6 py-3 px-4 text-xs border-b border-r-2 border-white font-semibold text-left">Actions</th>
+                                <th class="w-1/12 py-3 px-4 text-xs border-b border-r-2 border-white font-semibold text-left">No.</th>
+                                <th class="w-2/12 py-3 px-4 text-xs border-b border-r-2 border-white font-semibold text-left">Date</th>
+                                <th class="w-3/12 py-3 px-4 text-xs border-b border-r-2 border-white font-semibold text-left">Name</th>
+                                <th class="w-2/12 py-3 px-4 text-xs border-b border-r-2 border-white font-semibold text-left">Department</th>
+                                <th class="w-1/16 py-3 px-4 text-xs border-b border-r-2 border-white font-semibold text-left">Time In</th>
+                                <th class="w-1/16 py-3 px-4 text-xs border-b border-r-2 border-white font-semibold text-left">Break In</th>
+                                <th class="w-1/16 py-3 px-4 text-xs border-b border-r-2 border-white font-semibold text-left">Break Out</th>
+                                <th class="w-1/16 py-3 px-4 text-xs border-b border-r-2 border-white font-semibold text-left">Time Out</th>
+                                <th class="w-2/12 py-3 px-4 text-xs border-b border-r-2 border-white font-semibold text-left">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="employeesTableBody">
@@ -138,8 +147,7 @@
                         </tbody>
                     </table>
                 </div>
-
-                <!-- Pagination controls -->
+            
                 <div class="mt-4 flex items-center justify-between">
                     <div>
                         <span id="paginationInfo" class="text-sm text-gray-700"></span>
@@ -150,79 +158,8 @@
                     </div>
                 </div>
             </div>
+            
         </main>
-    </div>
-
-    <!-- Add this modal at the end of the body, just before the closing </body> tag -->
-    <div id="modalOverlay" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden items-center justify-center backdrop-blur-sm">
-        <div id="addEmployeeModal" class="relative p-8 border w-[700px] shadow-lg rounded-md bg-white">
-            <h3 class="text-xl font-bold text-gray-700 mb-6">Add New Employee</h3>
-            <form id="addEmployeeForm">
-                <div class="flex space-x-4 mb-5">
-                    <div class="flex-1">
-                        <label for="firstname" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                        <input type="text" id="firstname" name="firstname" required class="text-xs text-gray-500 font-semibold mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2">
-                    </div>
-                    <div class="flex-1">
-                        <label for="lastname" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                        <input type="text" id="lastname" name="lastname" required class="text-xs text-gray-500 font-semibold mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2">
-                    </div>
-                </div>
-                <div class="mb-5">
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                    <input type="email" id="email" name="email" required class="text-xs text-gray-500 font-semibold mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2">
-                </div>
-                <div class="flex space-x-4 mb-5"> 
-                    <!-- New flex container for password and confirm password -->
-                    <div class="flex-1">
-                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                        <input type="password" id="password" name="password" required class="text-xs text-gray-500 font-semibold mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2">
-                    </div>
-                    <div class="flex-1">
-                        <label for="confirm_password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-                        <input type="password" id="confirm_password" name="confirm_password" required class="text-xs text-gray-500 font-semibold mt-1 block w-full border rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2">
-                    </div>
-                </div>
-                <div class="flex space-x-4 mb-5">
-                    <div class="flex-1">
-                        <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
-                        <select id="gender" name="gender" required class="text-xs font-semibold mt-1 block w-full rounded-md  border border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2 text-gray-500">
-                            <option value="" disabled selected hidden>Select Gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
-                    </div>
-                    <div class="flex-1">
-                        <label for="department_id" class="block text-sm font-medium text-gray-700 mb-1">Department</label>
-                        <select id="department_id" name="department_id" required class=" text-xs font-semibold mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2 text-gray-500">
-                            <option value="" disabled selected hidden>Select Department</option>
-                            <option value=1>HR</option>
-                            <option value=2>IT</option>
-                            <option value=3>General Services</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="mb-6">
-                    <label for="shift_id" class="block text-sm font-medium text-gray-700 mb-1">Shifts</label>
-                    <select id="shift_id" name="shift_id" required class=" text-xs font-semibold mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2 text-gray-500">
-                        <option value="" disabled selected hidden>Select Shift</option>
-                        <option value="1">Regular</option>
-                        <option value="2">Early Morning</option>
-                        <option value="3">Midday</option>
-                    </select>
-                </div>
-                <div class="flex justify-end">
-                    <button type="button" id="cancelAddEmployee" class="mr-3 px-4 py-2 text-xs font-bold text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">Cancel</button>
-                    <button id="addEmployeeBtn2" type="submit" class="px-4 text-bir-blue bg-bir-yellow  font-bold rounded-lg text-xs p-3 transition-all duration-300 ease-in-out">Add Employee</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
- 
-  <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-4 right-4 p-4 rounded-md shadow-lg hidden">
-        <div id="toastContent" class="text-white font-semibold"></div>
     </div>
 
 </body>

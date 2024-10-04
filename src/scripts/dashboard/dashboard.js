@@ -52,7 +52,7 @@ function clearAllData() {
     });
 }
 
-function fetchMonthlyData(year, month) {
+async function fetchMonthlyData(year, month) {
     const storageKey = `attendanceData_${year}_${month}`;
     const storedData = localStorage.getItem(storageKey);
 
@@ -60,6 +60,7 @@ function fetchMonthlyData(year, month) {
         return JSON.parse(storedData);
     }
 
+    const totalEmployees = await fetchTotalEmployees();
     const today = new Date();
     const currentYear = today.getFullYear();
     const currentMonth = today.getMonth();
@@ -78,17 +79,17 @@ function fetchMonthlyData(year, month) {
             if (i < currentDay) {
                 let present, onLeave, absent;
                 if (Math.random() < 0.2) {
-                    onLeave = Math.floor(Math.random() * 3) + 1;
-                    absent = Math.floor(Math.random() * 4) + 1;
-                    present = 138 - onLeave - absent;
+                    onLeave = Math.floor(Math.random() * (totalEmployees * 0.05)); // Max 5% on leave
+                    absent = Math.floor(Math.random() * (totalEmployees * 0.1)); // Max 10% absent
+                    present = totalEmployees - onLeave - absent;
                 } else {
                     onLeave = 0;
                     if (Math.random() < 0.3) {
-                        present = 138;
+                        present = totalEmployees;
                         absent = 0;
                     } else {
-                        absent = Math.floor(Math.random() * 5) + 1;
-                        present = 138 - absent;
+                        absent = Math.floor(Math.random() * (totalEmployees * 0.05)); // Max 5% absent
+                        present = totalEmployees - absent;
                     }
                 }
                 presentEmployees.push(present);
@@ -128,16 +129,20 @@ function clearPreviousMonthsData(currentYear, currentMonth) {
     });
 }
 
-function updateChart() {
+async function updateChart() {
     const selectedYear = parseInt(document.getElementById('yearSelector').value);
     const selectedMonth = parseInt(document.getElementById('monthSelector').value);
 
-    const data = fetchMonthlyData(selectedYear, selectedMonth);
+    const data = await fetchMonthlyData(selectedYear, selectedMonth);
+    const totalEmployees = await fetchTotalEmployees();
 
     employeeAttendanceChart.data.labels = data.labels;
     employeeAttendanceChart.data.datasets[0].data = data.presentEmployees;
     employeeAttendanceChart.data.datasets[1].data = data.absentEmployees;
     employeeAttendanceChart.data.datasets[2].data = data.employeesOnLeave;
+    
+    employeeAttendanceChart.options.scales.y.max = totalEmployees;
+    
     employeeAttendanceChart.update();
 
     console.log('Chart updated for:', { year: selectedYear, month: months[selectedMonth] });
@@ -146,8 +151,8 @@ function updateChart() {
 // Add this at the top of your file with other global variables
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-document.addEventListener('DOMContentLoaded', function() {
-    initializeMonthlyData();
+document.addEventListener('DOMContentLoaded', async function() {
+    await initializeMonthlyData();
 
     const ctx = document.getElementById('employeeAttendanceChart').getContext('2d');
     
@@ -284,10 +289,15 @@ document.addEventListener('DOMContentLoaded', function() {
     monthSelector.addEventListener('change', updateChart);
     yearSelector.addEventListener('change', updateChart);
 
-    updateChart();
-    updateDashboardCards(); // Initial update of dashboard cards
+    await updateChart();
+    await updateDashboardCards();
+    updateAttendancePieChart();
+    populateRecentLogs();
 
-    setInterval(updateDashboardCards, 60000);
+    setInterval(async () => {
+        await updateDashboardCards();
+        updateAttendancePieChart();
+    }, 60000);
 
 });
 
@@ -300,28 +310,38 @@ function formatDate(date) {
     return date.toLocaleDateString('en-US', options);
 }
 
-function updateDashboardCards() {
+async function updateDashboardCards() {
     const today = new Date();
     const currentYear = today.getFullYear();
     const currentMonth = today.getMonth();
     const currentDay = today.getDate() - 1; // Adjust for 0-based index
 
-    const totalEmployees = 138;
-    let currentMonthData = fetchMonthlyData(currentYear, currentMonth);
+    const totalEmployees = await fetchTotalEmployees();
+    const shiftsCount = await fetchShifts();
+    const departmentsCount = await fetchDepartments();
 
-    const presentToday = currentMonthData.presentEmployees[currentDay] || 0;
-    const absentToday = currentMonthData.absentEmployees[currentDay] || 0;
-    const onLeaveToday = currentMonthData.employeesOnLeave[currentDay] || 0;
+    // Calculate percentages for present, absent, and on leave
+    const presentPercentage = 0.85; // Example: 85% present
+    const absentPercentage = 0.10; // Example: 10% absent
+    const onLeavePercentage = 0.05; // Example: 5% on leave
+
+    const presentToday = Math.round(totalEmployees * presentPercentage);
+    const absentToday = Math.round(totalEmployees * absentPercentage);
+    const onLeaveToday = Math.round(totalEmployees * onLeavePercentage);
 
     document.getElementById('totalEmployees').textContent = totalEmployees;
     document.getElementById('presentToday').textContent = presentToday;
     document.getElementById('absentToday').textContent = absentToday;
     document.getElementById('onLeaveToday').textContent = onLeaveToday;
+    document.getElementById('shiftsCount').textContent = shiftsCount;
+    document.getElementById('departmentsCount').textContent = departmentsCount; // Update departments count
 
     // Update the date display
     document.getElementById('currentDate').textContent = formatDate(today);
 
     console.log('Dashboard updated:', { totalEmployees, presentToday, absentToday, onLeaveToday, date: formatDate(today) });
+    
+    updateAttendancePieChart(presentToday, absentToday, onLeaveToday);
 }
 
 function initializeMonthlyData() {
@@ -338,4 +358,186 @@ function initializeMonthlyData() {
 
     // Generate data for the current month if it doesn't exist
     fetchMonthlyData(currentYear, currentMonth);
+}
+
+let attendancePieChart;
+
+function updateAttendancePieChart() {
+    const presentToday = parseInt(document.getElementById('presentToday').textContent);
+    const absentToday = parseInt(document.getElementById('absentToday').textContent);
+    const onLeaveToday = parseInt(document.getElementById('onLeaveToday').textContent);
+
+    // Calculate late (for this example, we'll assume 10% of present are late)
+    const lateCount = Math.round(presentToday * 0.1);
+    const actuallyPresent = presentToday - lateCount;
+
+    const ctx = document.getElementById('attendancePieChart').getContext('2d');
+    
+    if (attendancePieChart) {
+        attendancePieChart.destroy();
+    }
+
+    attendancePieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Present (on time)', 'Present (late)', 'Absent', 'On Leave',],
+            datasets: [{
+                data: [actuallyPresent, lateCount, absentToday, onLeaveToday],
+                backgroundColor: ['#003087', '#FFC107', '#ED1C24', '#4B5563']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    top: 20,
+                    bottom: 20
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        boxWidth: 15,
+                        padding: 15,
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed || 0;
+                            const total = context.dataset.data.reduce((acc, data) => acc + data, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${label}: ${value} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Sample recent logs data
+const recentLogsData = [
+    { name: 'John Doe', action: 'Checked In', time: '08:30 AM' },
+    { name: 'Jane Smith', action: 'Checked Out', time: '05:15 PM' },
+    { name: 'Mike Johnson', action: 'Requested Leave', time: '02:45 PM' },
+    { name: 'Emily Brown', action: 'Checked In (Late)', time: '09:10 AM' },
+    { name: 'Alex Wilson', action: 'Checked In', time: '08:55 AM' },
+    { name: 'Stephen Brown', action: 'Checked In', time: '09:00 AM' },
+
+];
+
+function populateRecentLogs() {
+    const recentLogsContainer = document.getElementById('recentLogs');
+    recentLogsContainer.innerHTML = ''; // Clear existing logs
+    
+    const table = document.createElement('table');
+    table.className = 'w-full';
+    
+    // Create table header
+    const thead = document.createElement('thead');
+    thead.innerHTML = `
+       
+    `;
+    table.appendChild(thead);
+    
+    // Create table body
+    const tbody = document.createElement('tbody');
+    recentLogsData.forEach(log => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b';
+        tr.innerHTML = `
+            <td class="py-2 text-xs text-gray-500 font-bold">${log.name}</td>
+            <td class="py-2 text-xs text-gray-500">${log.action}</td>
+            <td class="py-2 text-xs text-gray-500 text-right">${log.time}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    
+    recentLogsContainer.appendChild(table);
+}
+
+async function fetchTotalEmployees() {
+    try {
+        const response = await fetch(`${backendURL}/api/user`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem("token")}`,
+            },
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.length;
+    } catch (error) {
+        console.error('Error fetching total employees:', error);
+        return 0;
+    }
+}
+
+async function setCsrfCookie() {
+    await fetch(`${backendURL}/sanctum/csrf-cookie`, {
+        method: 'GET',
+        credentials: 'include',
+    });
+}
+
+// Call this function before any API requests
+await setCsrfCookie();
+
+async function fetchShifts() {
+    try {
+        const response = await fetch(`${backendURL}/api/shift`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.length; // Return the number of shifts
+    } catch (error) {
+        console.error('Error fetching shifts:', error);
+        return 0;
+    }
+}
+
+async function fetchDepartments() {
+    try {
+        const response = await fetch(`${backendURL}/api/department`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.length; // Return the number of departments
+    } catch (error) {
+        console.error('Error fetching departments:', error);
+        return 0;
+    }
 }

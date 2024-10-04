@@ -115,13 +115,13 @@ function displayEmployees() {
         const departmentName = getDepartmentName(employee.department_id);
         
         row.innerHTML = `
-            <td class="w-1/6 text-xs py-3 px-4 border-b border-r-2 border-white ${bgColor}">${employee.user_id || 'N/A'}</td>
-            <td class="w-1/4 text-xs py-3 px-4 border-b border-r-2 border-white ${bgColor}">
-                <a href="#" class="employee-name text-bir-blue hover:underline font-semibold" data-id="${employee.id}">${fullName}</a>
+            <td class="w-1/6 text-xs text-gray-500 font-bold py-3 px-4 border-b border-r-2 border-white ${bgColor}">${employee.user_id || 'N/A'}</td>
+            <td class="w-1/4 text-xs text-gray-500 font-bold py-3 px-4 border-b border-r-2 border-white ${bgColor}">
+                <a href="#" class="employee-name underline hover:underline font-semibold" data-id="${employee.id}">${fullName}</a>
             </td>
-            <td class="w-1/6 text-xs py-3 px-4 border-b border-r-2 border-white ${bgColor}">${departmentName}</td>
-            <td class="w-1/4 text-xs py-3 px-4 border-b border-r-2 border-white ${bgColor}">${employee.email || 'N/A'}</td>
-            <td class="w-1/6 text-xs py-3 px-4 border-b border-r-2 border-white ${bgColor}">
+            <td class="w-1/6 text-xs text-gray-500 font-bold py-3 px-4 border-b border-r-2 border-white ${bgColor}">${departmentName}</td>
+            <td class="w-1/4 text-xs text-gray-500 font-bold py-3 px-4 border-b border-r-2 border-white ${bgColor}">${employee.email || 'N/A'}</td>
+            <td class="w-1/6 text-xs text-gray-500 font-bold py-3 px-4 border-b border-r-2 border-white ${bgColor}">
                 <button class="text-blue-500 hover:text-blue-700 mr-2 edit-btn" data-id="${employee.id}">Edit</button>
                 <button class="text-red-500 hover:text-red-700 delete-btn" data-id="${employee.id}">Delete</button>
             </td>
@@ -245,3 +245,103 @@ document.addEventListener('DOMContentLoaded', async () => {
         showToast('Error loading dashboard. Please refresh the page.', 'error');
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const addEmployeeBtn = document.getElementById('addEmployeeBtn');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const mainContent = document.getElementById('mainContent');
+    const cancelAddEmployee = document.getElementById('cancelAddEmployee');
+    const addEmployeeForm = document.getElementById('addEmployeeForm');
+
+    // Function to show the modal
+    function showModal() {
+        modalOverlay.classList.remove('hidden');
+        modalOverlay.classList.add('flex');
+        mainContent.classList.add('blur-sm'); // Add blur to main content
+    }
+
+    // Function to hide the modal
+    function hideModal() {
+        modalOverlay.classList.add('hidden');
+        modalOverlay.classList.remove('flex');
+        mainContent.classList.remove('blur-sm'); // Remove blur from main content
+    }
+
+    // Show modal when Add Employee button is clicked
+    addEmployeeBtn.addEventListener('click', showModal);
+
+    // Hide modal when Cancel button is clicked
+    if (cancelAddEmployee) {
+        cancelAddEmployee.addEventListener('click', hideModal);
+    }
+
+    // Hide modal when clicking outside of it
+    modalOverlay.addEventListener('click', function(e) {
+        if (e.target === modalOverlay) {
+            hideModal();
+        }
+    });
+
+    // Handle form submission
+    addEmployeeForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(addEmployeeForm);
+        const userData = Object.fromEntries(formData.entries());
+
+        try {
+            const response = await fetch(`${backendURL}/api/user`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify(userData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to create employee');
+            }
+
+            const newEmployee = await response.json();
+            console.log('Employee created:', newEmployee);
+            
+            // Close the modal and reset the form
+            hideModal();
+            addEmployeeForm.reset();
+            
+            // Refresh the employee list
+            await loadEmployees();
+            displayEmployees();
+
+            showToast('Employee added successfully', 'success');
+
+        } catch (error) {
+            console.error('Error creating employee:', error);
+            showToast('Failed to add employee', 'error');
+        }
+    });
+});
+
+// Example function to populate departments (you'll need to implement this)
+async function populateDepartments() {
+    const departmentSelect = document.getElementById('department_id');
+    try {
+        const response = await fetch(`${backendURL}/api/departments`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
+            },
+        });
+        const departments = await response.json();
+        departments.forEach(dept => {
+            const option = document.createElement('option');
+            option.value = dept.id;
+            option.textContent = dept.name;
+            departmentSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error fetching departments:', error);
+    }
+}
+
+// Implement a similar function for shifts

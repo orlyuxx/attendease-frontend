@@ -118,12 +118,13 @@ body {
 .dashboard-card:nth-child(3) { animation-delay: 0.5s; }
 .dashboard-card:nth-child(4) { animation-delay: 0.6s; }
 
+/* 
 #currentDate {
     font-size: 1.25rem;
     font-weight: 600;
     color: #4a5568;
     margin-bottom: 1.5rem;
-}
+} */
 
 @keyframes slideInLeft {
     from {
@@ -177,7 +178,6 @@ body {
     animation-delay: 0.2s; /* Delay to let sidebar load first */
 }
 
-
 .dashboard-title {
     animation: fadeInUp 0.5s ease-out 0.2s forwards;
     opacity: 0;
@@ -196,22 +196,3 @@ body {
 .sidebar-link {
     transition: all 0.3s ease-out;
 }
-    
-.table-fixed {
-    table-layout: fixed;
-}
-.table-fixed td {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-#addEmployeeBtn:hover {
-    background-color: #003087;
-    color: #FDB913;
-}
-
-#addEmployeeBtn2:hover{
-    background-color: #003087;
-    color: #FDB913;
-  }
