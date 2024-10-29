@@ -12,14 +12,20 @@
 
 <body>    
     <div class="font-[sans-serif]">
-        <div class="min-h-screen flex fle-col items-center justify-center py-6 px-4">
+        <div class="min-h-screen flex flex-col items-center justify-center py-6 px-4">
           <div class="grid md:grid-cols-2 items-center gap-4 max-w-6xl w-full">
+        
+            <!-- Form -->
             <div class="border border-gray-300 rounded-lg p-6 max-w-md shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] max-md:mx-auto max-md:w-full form-container"> 
-
+              
+              <div class="flex justify-center mb-6">
+                <img src="../src/img/birlogo.png" alt="BIR Logo" id="bir-logo" class="w-auto">
+              </div>
+              
               <form id="form_login" class="space-y-4">
                 <div id="toast-container"></div>
                 <div class="mb-8">
-                  <h3 class="text-bir-blue text-3xl font-bold">Sign in</h3>
+                  <!-- <h3 class="text-bir-blue text-3xl font-bold">Sign in</h3> -->
                   <p class="text-bir-blue text-sm mt-4 leading-relaxed">Sign in to your admin account.</p>
                 </div>
   
@@ -49,11 +55,14 @@
 
               </form>
             </div>
+
+            <!-- Image -->
             <div class="lg:h-[400px] md:h-[300px] max-md:hidden"> <!-- Hide on small devices -->
               <img id="login-image" src="../src/img/login-img.webp" class="w-full h-full max-md:w-4/5 mx-auto block object-cover" alt="Dining Experience" />
             </div>
           </div>
         </div>
       </div>
+
 </body>
 </html>

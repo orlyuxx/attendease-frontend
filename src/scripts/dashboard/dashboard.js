@@ -198,24 +198,22 @@ document.addEventListener('DOMContentLoaded', async function() {
                 {
                     label: 'Present Employees',
                     data: [],
-                    backgroundColor: 'rgba(75, 192, 192, 0.8)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: '#003087',
                     borderWidth: 1,
                     barThickness: 10  // Add this line to increase bar thickness
                 },
                 {
                     label: 'Absent Employees',
                     data: [],
-                    backgroundColor: 'rgba(255, 99, 132, 0.8)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: '#ED1C24',
                     borderWidth: 1,
                     barThickness: 10  // Add this line to increase bar thickness
                 },
                 {
                     label: 'Employees on Leave',
                     data: [],
-                    backgroundColor: 'rgba(255, 206, 86, 0.8)',
-                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 1,
+                    backgroundColor: '#FDB913',
                     borderWidth: 1,
                     barThickness: 10  // Add this line to increase bar thickness
                 }
